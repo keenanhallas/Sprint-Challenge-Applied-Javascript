@@ -7,3 +7,19 @@
 //
 //  Each tab should look like this:
 //    <div class="tab">topic here</div>
+
+topicsDiv = document.querySelector(`.topics`);
+
+axios.get(`https://lambda-times-backend.herokuapp.com/topics`)
+    .then(response => {
+        console.log(response);
+        response.data.topics.forEach(topic => {
+            tabDiv = document.createElement(`div`); //is it ok that these won't have unique variable names, for future access? Numbered classes?
+            tabDiv.classList.add(`tab`);
+            tabDiv.textContent = topic;
+            topicsDiv.appendChild(tabDiv);
+        });
+    })
+    .catch(err => {
+        console.log(err);
+    });
