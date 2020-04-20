@@ -18,3 +18,47 @@
 // </div>
 //
 // Use your function to create a card for each of the articles and add the card to the DOM.
+
+function cardCreator(article){
+    const cardDiv = document.createElement(`div`);
+    cardDiv.classList.add(`card`);
+
+        const headlineDiv = document.createElement(`div`);
+        headlineDiv.classList.add(`headline`);
+        headlineDiv.textContent = article.headline;
+        cardDiv.appendChild(headlineDiv);
+
+        const authorDiv = document.createElement(`div`);
+        authorDiv.classList.add(`author`);
+        cardDiv.appendChild(authorDiv);
+
+            const imgContainer = document.createElement(`div`);
+            imgContainer.classList.add(`img-container`);
+            authorDiv.appendChild(imgContainer);
+
+                const authorImg = document.createElement(`img`);
+                authorImg.src = article.authorPhoto;
+                imgContainer.appendChild(authorImg);
+
+            const nameSpan = document.createElement(`span`);
+            nameSpan.textContent = `By ${article.authorName}`;
+            authorDiv.appendChild(nameSpan);
+
+    return cardDiv;
+}
+
+const cardsContainer = document.querySelector(`.cards-container`);
+
+axios.get(`https://lambda-times-backend.herokuapp.com/articles`)
+    .then(response => {
+        console.log(response);
+        const topics = Object.keys(response.data.articles);
+        topics.forEach(topic => {
+            response.data.articles[topic].forEach(article => {
+                cardsContainer.appendChild(cardCreator(article)); //is it better to add the cards to the dom in the card creator function?
+            });
+        });
+    })
+    .catch(err => {
+        console.log(err);
+    });
